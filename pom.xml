@@ -59,6 +59,16 @@
             <version>7.8.0</version>
             <scope>test</scope>
         </dependency>
+
+
+
+		<dependency>
+            <groupId>org.apache.maven.surefire</groupId>
+            <artifactId>surefire-testng</artifactId>
+            <version>3.2.5</version>
+        </dependency>
+
+
     </dependencies>
 
 	<build>
