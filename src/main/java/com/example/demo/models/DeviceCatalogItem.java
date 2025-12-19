@@ -1,26 +1,27 @@
 package com.example.demo.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 @Entity
-@Table(name = "device_catalog_items")
 public class DeviceCatalogItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String deviceCode;
-
     private String deviceType;
     private String model;
     private Integer maxAllowedPerEmployee;
     private Boolean active;
 
+   
     public DeviceCatalogItem() {
     }
 
+   
     public DeviceCatalogItem(Long id, String deviceCode, String deviceType, String model, Integer maxAllowedPerEmployee, Boolean active) {
         this.id = id;
         this.deviceCode = deviceCode;
@@ -30,6 +31,7 @@ public class DeviceCatalogItem {
         this.active = active;
     }
 
+    
     public Long getId() {
         return id;
     }
