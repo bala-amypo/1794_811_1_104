@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "issued_device_records")
-public class IssuedDeviceRecord {
+public class IssedDeviceRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +37,7 @@ public class IssuedDeviceRecord {
         }
     }
 
-    // ===== Getters and Setters =====
+    // ================= GETTERS & SETTERS =================
 
     public Long getId() {
         return id;
@@ -63,6 +63,12 @@ public class IssuedDeviceRecord {
         return issuedDate;
     }
 
+    // ✅ ADDED (FIXES COMPILATION ERROR)
+    public void setIssuedDate(LocalDate issuedDate) {
+        this.issuedDate = issuedDate;
+        this.status = "ISSUED";
+    }
+
     public LocalDate getReturnedDate() {
         return returnedDate;
     }
@@ -74,5 +80,10 @@ public class IssuedDeviceRecord {
 
     public String getStatus() {
         return status;
+    }
+
+    // ✅ OPTIONAL (SAFE)
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
