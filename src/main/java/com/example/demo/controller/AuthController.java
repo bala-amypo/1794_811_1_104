@@ -19,18 +19,15 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthController(
-            UserAccountRepository userAccountRepository,
-            PasswordEncoder passwordEncoder,
-            JwtTokenProvider jwtTokenProvider) {
-
+    public AuthController(UserAccountRepository userAccountRepository,
+                          PasswordEncoder passwordEncoder,
+                          JwtTokenProvider jwtTokenProvider) {
         this.userAccountRepository = userAccountRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
     // ================= REGISTER =================
-
     @PostMapping("/register")
     public UserAccount register(@RequestBody UserAccount user) {
 
@@ -41,7 +38,6 @@ public class AuthController {
     }
 
     // ================= LOGIN =================
-
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody Map<String, String> request) {
 
