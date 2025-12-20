@@ -7,38 +7,38 @@ import com.example.demo.repository.IssuedDeviceRecordRepository;
 import com.example.demo.service.IssuedDeviceRecordService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService {
 
-    private final IssuedDeviceRecordRepository issuedRepo;
+    private final IssuedDeviceRecordRepository repository;
 
-    public IssuedDeviceRecordServiceImpl(IssuedDeviceRecordRepository issuedRepo) {
-        this.issuedRepo = issuedRepo;
+    public IssuedDeviceRecordServiceImpl(IssuedDeviceRecordRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public IssuedDeviceRecord issueDevice(IssuedDeviceRecord record) {
-        return issuedRepo.save(record);
-    }
 
-    @Override
-    public IssuedDeviceRecord returnDevice(Long recordId) {
-
-        IssuedDeviceRecord record = issuedRepo.findById(recordId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Issued device record not found"));
-
-        if (record.getReturnedDate() != null) {
-            throw new BadRequestException("Device already returned");
+        if (record.getEmployeeId() == null) {
+            throw new BadRequestException("Employee ID is required");
         }
 
-        record.setReturnedDate(LocalDate.now());
-        return issuedRepo.save(record);
+        record.setIssuedDate(LocalDate.now());
+        return repository.save(record);
     }
 
     @Override
-    public List<IssuedDeviceRecord> getIssuedDevicesByEmployee(Long employeeId) {
-        return issuedRepo.findByEmployeeId(employeeId);
+    public List<IssuedDeviceRecord> getAllIssuedDevices() {
+        return repository.findAll();
+    }
+
+    @Override
+    public IssuedDeviceRecord getById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Issued device not found"));
     }
 }

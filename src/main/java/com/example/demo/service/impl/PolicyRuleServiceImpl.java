@@ -7,34 +7,34 @@ import com.example.demo.repository.PolicyRuleRepository;
 import com.example.demo.service.PolicyRuleService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 @Service
 public class PolicyRuleServiceImpl implements PolicyRuleService {
 
-    private final PolicyRuleRepository ruleRepository;
+    private final PolicyRuleRepository repository;
 
-    public PolicyRuleServiceImpl(PolicyRuleRepository ruleRepository) {
-        this.ruleRepository = ruleRepository;
+    public PolicyRuleServiceImpl(PolicyRuleRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public PolicyRule createRule(PolicyRule rule) {
-
-        ruleRepository.findByRuleCode(rule.getRuleCode())
-                .ifPresent(r -> {
-                    throw new BadRequestException("Rule code already exists");
-                });
-
-        return ruleRepository.save(rule);
+    public PolicyRule create(PolicyRule rule) {
+        if (rule.getName() == null) {
+            throw new BadRequestException("Rule name is required");
+        }
+        return repository.save(rule);
     }
 
     @Override
-    public List<PolicyRule> getAllRules() {
-        return ruleRepository.findAll();
+    public List<PolicyRule> getAll() {
+        return repository.findAll();
     }
 
     @Override
-    public List<PolicyRule> getActiveRules() {
-        return ruleRepository.findByActiveTrue();
+    public PolicyRule getById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Policy rule not found"));
     }
 }
