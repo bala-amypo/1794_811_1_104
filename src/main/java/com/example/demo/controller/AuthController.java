@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.models.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.security.JwtTokenProvider;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +11,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
-@Tag(name = "Authentication")
 public class AuthController {
 
     private final UserAccountRepository userAccountRepository;
@@ -27,17 +25,6 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // ================= REGISTER =================
-    @PostMapping("/register")
-    public UserAccount register(@RequestBody UserAccount user) {
-
-        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
-        user.setActive(true);
-
-        return userAccountRepository.save(user);
-    }
-
-    // ================= LOGIN =================
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody Map<String, String> request) {
 
@@ -58,7 +45,6 @@ public class AuthController {
 
         Map<String, String> response = new HashMap<>();
         response.put("token", token);
-
         return response;
     }
 }
