@@ -1,16 +1,9 @@
 package com.example.demo.models;
 
-import java.time.LocalDateTime;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "eligibility_check_records")
+@Table(name = "eligibility_checks")
 public class EligibilityCheckRecord {
 
     @Id
@@ -18,21 +11,12 @@ public class EligibilityCheckRecord {
     private Long id;
 
     private Long employeeId;
-
     private Long deviceItemId;
 
-    private Boolean isEligible;
+    private Boolean eligible;
 
-    private String reason;
+    // ===== getters & setters =====
 
-    private LocalDateTime checkedAt;
-
-    @PrePersist
-    public void prePersist() {
-        this.checkedAt = LocalDateTime.now();
-    }
-
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -53,24 +37,11 @@ public class EligibilityCheckRecord {
         this.deviceItemId = deviceItemId;
     }
 
-    public Boolean getIsEligible() {
-        return isEligible;
+    public Boolean getEligible() {
+        return eligible;
     }
 
-    public void setIsEligible(Boolean eligible) {
-        isEligible = eligible;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public LocalDateTime getCheckedAt() {
-        return checkedAt;
+    public void setEligible(Boolean eligible) {
+        this.eligible = eligible;
     }
 }
-
