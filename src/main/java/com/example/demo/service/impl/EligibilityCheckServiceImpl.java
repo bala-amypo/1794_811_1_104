@@ -1,13 +1,11 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.models.*;
-import com.example.demo.repository.*;
+import com.example.demo.models.EligibilityCheckRecord;
+import com.example.demo.repository.EligibilityCheckRecordRepository;
 import com.example.demo.service.EligibilityCheckService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class EligibilityCheckServiceImpl implements EligibilityCheckService {

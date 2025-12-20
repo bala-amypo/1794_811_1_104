@@ -7,8 +7,6 @@ import com.example.demo.repository.IssuedDeviceRecordRepository;
 import com.example.demo.service.IssuedDeviceRecordService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService {
