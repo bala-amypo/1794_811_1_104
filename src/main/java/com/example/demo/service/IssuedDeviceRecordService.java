@@ -1,14 +1,13 @@
 package com.example.demo.service;
 
-import java.util.List;
-
 import com.example.demo.models.IssuedDeviceRecord;
+import java.util.List;
 
 public interface IssuedDeviceRecordService {
 
     IssuedDeviceRecord issueDevice(IssuedDeviceRecord record);
 
-    IssuedDeviceRecord returnDevice(Long recordId);
+    List<IssuedDeviceRecord> getAllIssuedDevices();
 
-    List<IssuedDeviceRecord> getIssuedDevicesByEmployee(Long employeeId);
+    IssuedDeviceRecord getById(Long id);
 }
