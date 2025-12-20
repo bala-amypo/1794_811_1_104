@@ -2,7 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.model.*;
+import com.example.demo.models.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.EligibilityCheckService;
 import org.springframework.stereotype.Service;
