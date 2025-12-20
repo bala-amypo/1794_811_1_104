@@ -12,29 +12,27 @@ import java.util.List;
 @Service
 public class PolicyRuleServiceImpl implements PolicyRuleService {
 
-    private final PolicyRuleRepository repository;
+    private final PolicyRuleRepository repo;
 
-    public PolicyRuleServiceImpl(PolicyRuleRepository repository) {
-        this.repository = repository;
+    public PolicyRuleServiceImpl(PolicyRuleRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public PolicyRule create(PolicyRule rule) {
-        if (rule.getName() == null) {
-            throw new BadRequestException("Rule name is required");
+    public PolicyRule createRule(PolicyRule rule) {
+        if (rule.getRuleCode() == null) {
+            throw new BadRequestException("Rule code required");
         }
-        return repository.save(rule);
+        return repo.save(rule);
     }
 
     @Override
-    public List<PolicyRule> getAll() {
-        return repository.findAll();
+    public List<PolicyRule> getAllRules() {
+        return repo.findAll();
     }
 
     @Override
-    public PolicyRule getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Policy rule not found"));
+    public List<PolicyRule> getActiveRules() {
+        return repo.findByActiveTrue();
     }
 }
