@@ -1,7 +1,11 @@
 package com.example.demo.service;
 
+import com.example.demo.models.EligibilityCheckRecord;
+import java.util.List;
+
 public interface EligibilityCheckService {
 
-    boolean checkEligibility(Long employeeId, Long deviceId);
+    EligibilityCheckRecord validateEligibility(Long employeeId, Long deviceItemId);
 
+    List<EligibilityCheckRecord> getChecksByEmployee(Long employeeId);
 }

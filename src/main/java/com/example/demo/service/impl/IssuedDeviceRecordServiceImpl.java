@@ -7,38 +7,32 @@ import com.example.demo.repository.IssuedDeviceRecordRepository;
 import com.example.demo.service.IssuedDeviceRecordService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService {
 
-    private final IssuedDeviceRecordRepository repository;
+    private final IssuedDeviceRecordRepository repo;
 
-    public IssuedDeviceRecordServiceImpl(IssuedDeviceRecordRepository repository) {
-        this.repository = repository;
+    public IssuedDeviceRecordServiceImpl(IssuedDeviceRecordRepository repo) {
+        this.repo = repo;
     }
 
     @Override
     public IssuedDeviceRecord issueDevice(IssuedDeviceRecord record) {
-
-        if (record.getEmployeeId() == null) {
-            throw new BadRequestException("Employee ID is required");
-        }
-
-        record.setIssuedDate(LocalDate.now());
-        return repository.save(record);
+        return repo.save(record);
     }
 
     @Override
-    public List<IssuedDeviceRecord> getAllIssuedDevices() {
-        return repository.findAll();
+    public IssuedDeviceRecord returnDevice(Long id) {
+        IssuedDeviceRecord record = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Record not found"));
+        record.setReturnedDate(java.time.LocalDate.now());
+        return repo.save(record);
     }
 
     @Override
-    public IssuedDeviceRecord getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Issued device not found"));
+    public List<IssuedDeviceRecord> getIssuedDevicesByEmployee(Long employeeId) {
+        return repo.findByEmployeeId(employeeId);
     }
 }
