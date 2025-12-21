@@ -4,7 +4,7 @@ import com.example.demo.models.IssuedDeviceRecord;
 
 public interface IssuedDeviceRecordService {
 
-    IssuedDeviceRecord issueDevice(IssuedDeviceRecord record);
+    IssuedDeviceRecord issuedDevice(IssuedDeviceRecord record);
 
     IssuedDeviceRecord returnDevice(Long recordId);
 }
