@@ -11,7 +11,8 @@ import com.example.demo.repository.IssuedDeviceRecordRepository;
 import com.example.demo.service.IssuedDeviceRecordService;
 
 @Service
-public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService {
+public class IssuedDeviceRecordServiceImpl
+        implements IssuedDeviceRecordService {
 
     private final IssuedDeviceRecordRepository repo;
 
@@ -19,29 +20,26 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
         this.repo = repo;
     }
 
-    // ================= ISSUE DEVICE =================
     @Override
     public IssuedDeviceRecord issueDevice(IssuedDeviceRecord record) {
 
-        // ❌ Ignore client-sent values completely
-        record.setId(null);                 // DB generates ID
+      
         record.setIssuedDate(LocalDate.now());
-        record.setReturnedDate(null);
+        record.setReturnedDate(null);   // ✅ REQUIRED
         record.setStatus("ISSUED");
 
         return repo.save(record);
     }
 
-    // ================= RETURN DEVICE =================
     @Override
     public IssuedDeviceRecord returnDevice(Long recordId) {
 
         IssuedDeviceRecord record = repo.findById(recordId)
                 .orElseThrow(() ->
-                        new BadRequestException("already returned"));
+                        new BadRequestException("Issued device record not found"));
 
         if (record.getReturnedDate() != null) {
-            throw new BadRequestException("already returned");
+            throw new BadRequestException("Device already returned");
         }
 
         record.setReturnedDate(LocalDate.now());
@@ -50,9 +48,5 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
         return repo.save(record);
     }
 
-    // ================= GET BY EMPLOYEE =================
-    @Override
-    public List<IssuedDeviceRecord> getIssuedDevicesByEmployee(Long employeeId) {
-        return repo.findByEmployeeId(employeeId);
-    }
+   
 }
