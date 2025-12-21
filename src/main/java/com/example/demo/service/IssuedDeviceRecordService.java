@@ -1,14 +1,37 @@
-package com.example.demo.service;
+@Service
+public class IssuedDeviceService {
 
-import com.example.demo.models.IssuedDeviceRecord;
-import java.util.List;
+    private final IssuedDeviceRepository issuedDeviceRepo;
+    private final EmployeeRepository employeeRepo;
+    private final DeviceItemRepository deviceItemRepo;
 
+    public IssuedDeviceService(
+            IssuedDeviceRepository issuedDeviceRepo,
+            EmployeeRepository employeeRepo,
+            DeviceItemRepository deviceItemRepo) {
+        this.issuedDeviceRepo = issuedDeviceRepo;
+        this.employeeRepo = employeeRepo;
+        this.deviceItemRepo = deviceItemRepo;
+    }
 
-public interface IssuedDeviceRecordService {
+    // 🔹 ISSUE DEVICE LOGIC (THIS IS WHERE IT GOES)
+    public IssuedDevice issueDevice(Long employeeId, Long deviceItemId) {
 
-    IssuedDeviceRecord issueDevice(IssuedDeviceRecord record);
+        Employee employee = employeeRepo.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
 
-    IssuedDeviceRecord returnDevice(Long id);
+        DeviceItem deviceItem = deviceItemRepo.findById(deviceItemId)
+                .orElseThrow(() -> new RuntimeException("Device not found"));
 
-    List<IssuedDeviceRecord> getIssuedDevicesByEmployee(Long employeeId);
+        IssuedDevice record = new IssuedDevice();
+
+        // ✅ CORRECT PLACE
+        record.setEmployee(employee);
+        record.setDeviceItem(deviceItem);
+        record.setIssuedDate(LocalDate.now());
+        record.setReturnedDate(null);        // ✅ MUST BE NULL
+        record.setStatus("ISSUED");
+
+        return issuedDeviceRepo.save(record);
+    }
 }
