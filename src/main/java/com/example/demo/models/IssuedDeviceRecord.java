@@ -1,52 +1,30 @@
 package com.example.demo.models;
 
+import java.time.LocalDate;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "issued_device_records")
 public class IssuedDeviceRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "employee_id", nullable = false)
-    private EmployeeProfile employee;
+    private Long employeeId;
+    private Long deviceItemId;
+    private LocalDate issuedDate;
+    private LocalDate returnedDate;
+    private String status; // ISSUED / RETURNED
 
-    @ManyToOne
-    @JoinColumn(name = "device_id", nullable = false)
-    private DeviceCatalogItem device;
-
-    private Boolean active = true;
-
-    // ===== GETTERS & SETTERS =====
-
-    public Long getId() {
-        return id;
-    }
-
-    public EmployeeProfile getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(EmployeeProfile employee) {
-        this.employee = employee;
-    }
-
-    public DeviceCatalogItem getDevice() {
-        return device;
-    }
-
-    public void setDevice(DeviceCatalogItem device) {
-        this.device = device;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
+    public Long getId() { return id; }
+    public Long getEmployeeId() { return employeeId; }
+    public void setEmployeeId(Long employeeId) { this.employeeId = employeeId; }
+    public Long getDeviceItemId() { return deviceItemId; }
+    public void setDeviceItemId(Long deviceItemId) { this.deviceItemId = deviceItemId; }
+    public LocalDate getIssuedDate() { return issuedDate; }
+    public void setIssuedDate(LocalDate issuedDate) { this.issuedDate = issuedDate; }
+    public LocalDate getReturnedDate() { return returnedDate; }
+    public void setReturnedDate(LocalDate returnedDate) { this.returnedDate = returnedDate; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

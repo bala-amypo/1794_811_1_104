@@ -1,42 +1,38 @@
 package com.example.demo.service.impl;
 
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.demo.models.EmployeeProfile;
 import com.example.demo.repository.EmployeeProfileRepository;
-import com.example.demo.service.EmployeeProfileService;
+import com.example.demo.exception.*;
 
 @Service
-public class EmployeeProfileServiceImpl implements EmployeeProfileService {
+public class EmployeeProfileServiceImpl implements com.example.demo.service.EmployeeProfileService {
 
-    @Autowired
-    private EmployeeProfileRepository repo;
+    private final EmployeeProfileRepository repo;
 
-    @Override
-    public EmployeeProfile createEmployee(EmployeeProfile employee) {
-        return repo.save(employee);
+    public EmployeeProfileServiceImpl(EmployeeProfileRepository repo) {
+        this.repo = repo;
     }
 
-    @Override
+    public EmployeeProfile createEmployee(EmployeeProfile e) {
+        repo.findByEmployeeId(e.getEmployeeId())
+            .ifPresent(x -> { throw new BadRequestException("EmployeeId already exists"); });
+        return repo.save(e);
+    }
+
     public EmployeeProfile getEmployeeById(Long id) {
-        return repo.findById(id).orElse(null);
+        return repo.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
     }
 
-    @Override
     public List<EmployeeProfile> getAllEmployees() {
         return repo.findAll();
     }
 
-    @Override
     public EmployeeProfile updateEmployeeStatus(Long id, boolean active) {
-        EmployeeProfile existingEmployee = repo.findById(id).orElse(null);
-        if (existingEmployee != null) {
-            existingEmployee.setActive(active); // Ensure your model has an 'active' field
-            return repo.save(existingEmployee);
-        }
-        return null;
+        EmployeeProfile e = getEmployeeById(id);
+        e.setActive(active);
+        return repo.save(e);
     }
 }

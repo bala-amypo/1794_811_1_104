@@ -1,10 +1,7 @@
-package com.example.demo.Controller;
+package com.example.demo.controller;
 
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.models.EmployeeProfile;
 import com.example.demo.service.EmployeeProfileService;
 
@@ -12,26 +9,29 @@ import com.example.demo.service.EmployeeProfileService;
 @RequestMapping("/api/employees")
 public class EmployeeProfileController {
 
-    @Autowired
-    private EmployeeProfileService employeeService;
+    private final EmployeeProfileService service;
 
-    @PostMapping("/create")
-    public EmployeeProfile createEmployee(@RequestBody EmployeeProfile employee) {
-        return employeeService.createEmployee(employee);
+    public EmployeeProfileController(EmployeeProfileService service) {
+        this.service = service;
+    }
+
+    @PostMapping
+    public EmployeeProfile create(@RequestBody EmployeeProfile e) {
+        return service.createEmployee(e);
     }
 
     @GetMapping("/{id}")
-    public EmployeeProfile getEmployeeById(@PathVariable Long id) {
-        return employeeService.getEmployeeById(id);
+    public EmployeeProfile get(@PathVariable Long id) {
+        return service.getEmployeeById(id);
     }
 
-    @GetMapping("/all")
-    public List<EmployeeProfile> getAllEmployees() {
-        return employeeService.getAllEmployees();
+    @GetMapping
+    public List<EmployeeProfile> all() {
+        return service.getAllEmployees();
     }
 
     @PutMapping("/{id}/status")
-    public EmployeeProfile updateStatus(@PathVariable Long id, @RequestParam boolean active) {
-        return employeeService.updateEmployeeStatus(id, active);
+    public EmployeeProfile status(@PathVariable Long id, @RequestParam boolean active) {
+        return service.updateEmployeeStatus(id, active);
     }
 }
