@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -23,9 +22,8 @@ public class IssuedDeviceRecordServiceImpl
     @Override
     public IssuedDeviceRecord issueDevice(IssuedDeviceRecord record) {
 
-      
         record.setIssuedDate(LocalDate.now());
-        record.setReturnedDate(null);   // ✅ REQUIRED
+        record.setReturnedDate(null);   // ✅ THIS WAS YOUR REQUIREMENT
         record.setStatus("ISSUED");
 
         return repo.save(record);
@@ -47,6 +45,4 @@ public class IssuedDeviceRecordServiceImpl
 
         return repo.save(record);
     }
-
-   
 }
