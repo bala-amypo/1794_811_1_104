@@ -1,90 +1,52 @@
 package com.example.demo.models;
 
-import java.time.LocalDate;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "issued_device_records")
 public class IssuedDeviceRecord {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long employeeId;
+    @ManyToOne
+    @JoinColumn(name = "employee_id", nullable = false)
+    private EmployeeProfile employee;
 
-    private Long deviceItemId;
+    @ManyToOne
+    @JoinColumn(name = "device_id", nullable = false)
+    private DeviceCatalogItem device;
 
-    private LocalDate issuedDate;
+    private Boolean active = true;
 
-    private LocalDate returnedDate;
-
-    private String status; // ISSUED / RETURNED
-
-    @PrePersist
-    public void onIssue() {
-        if (this.issuedDate == null) {
-            this.issuedDate = LocalDate.now();
-        }
-        if (this.returnedDate == null) {
-            this.status = "ISSUED";
-        }
-    }
-
-    // ================= GETTERS & SETTERS =================
+    // ===== GETTERS & SETTERS =====
 
     public Long getId() {
         return id;
     }
 
-    public Long getEmployeeId() {
-        return employeeId;
+    public EmployeeProfile getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
+    public void setEmployee(EmployeeProfile employee) {
+        this.employee = employee;
     }
 
-    public Long getDeviceItemId() {
-        return deviceItemId;
+    public DeviceCatalogItem getDevice() {
+        return device;
     }
 
-    public void setDeviceItemId(Long deviceItemId) {
-        this.deviceItemId = deviceItemId;
+    public void setDevice(DeviceCatalogItem device) {
+        this.device = device;
     }
 
-    public LocalDate getIssuedDate() {
-        return issuedDate;
+    public Boolean getActive() {
+        return active;
     }
 
-    // ✅ ADDED (FIXES COMPILATION ERROR)
-    public void setIssuedDate(LocalDate issuedDate) {
-        this.issuedDate = issuedDate;
-        this.status = "ISSUED";
-    }
-
-    public LocalDate getReturnedDate() {
-        return returnedDate;
-    }
-
-    public void setReturnedDate(LocalDate returnedDate) {
-        this.returnedDate = returnedDate;
-        this.status = "RETURNED";
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    // ✅ OPTIONAL (SAFE)
-    public void setStatus(String status) {
-        this.status = status;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

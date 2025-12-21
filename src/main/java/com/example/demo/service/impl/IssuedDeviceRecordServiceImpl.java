@@ -1,38 +1,32 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.BadRequestException;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.models.IssuedDeviceRecord;
-import com.example.demo.repository.IssuedDeviceRecordRepository;
-import com.example.demo.service.IssuedDeviceRecordService;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+import com.example.demo.models.EmployeeProfile;
+import com.example.demo.models.IssuedDeviceRecord;
+import com.example.demo.repository.EmployeeProfileRepository;
+import com.example.demo.repository.IssuedDeviceRecordRepository;
+
 @Service
-public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService {
+public class IssuedDeviceRecordServiceImpl {
 
     private final IssuedDeviceRecordRepository repo;
+    private final EmployeeProfileRepository employeeRepo;
 
-    public IssuedDeviceRecordServiceImpl(IssuedDeviceRecordRepository repo) {
+    public IssuedDeviceRecordServiceImpl(
+            IssuedDeviceRecordRepository repo,
+            EmployeeProfileRepository employeeRepo) {
         this.repo = repo;
+        this.employeeRepo = employeeRepo;
     }
 
-    @Override
-    public IssuedDeviceRecord issueDevice(IssuedDeviceRecord record) {
-        return repo.save(record);
-    }
+    public List<IssuedDeviceRecord> getIssuedDevicesByEmployeeId(Long employeeId) {
 
-    @Override
-    public IssuedDeviceRecord returnDevice(Long id) {
-        IssuedDeviceRecord record = repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Record not found"));
-        record.setReturnedDate(java.time.LocalDate.now());
-        return repo.save(record);
-    }
+        EmployeeProfile employee = employeeRepo.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
 
-    @Override
-    public List<IssuedDeviceRecord> getIssuedDevicesByEmployee(Long employeeId) {
-        return repo.findByEmployeeId(employeeId);
+        return repo.findByEmployee(employee);
     }
 }
