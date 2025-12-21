@@ -19,15 +19,20 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
         this.repo = repo;
     }
 
+    // ================= ISSUE DEVICE =================
     @Override
     public IssuedDeviceRecord issueDevice(IssuedDeviceRecord record) {
 
+        // ❌ Ignore client-sent values completely
+        record.setId(null);                 // DB generates ID
         record.setIssuedDate(LocalDate.now());
+        record.setReturnedDate(null);
         record.setStatus("ISSUED");
 
         return repo.save(record);
     }
 
+    // ================= RETURN DEVICE =================
     @Override
     public IssuedDeviceRecord returnDevice(Long recordId) {
 
@@ -45,12 +50,9 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
         return repo.save(record);
     }
 
+    // ================= GET BY EMPLOYEE =================
     @Override
     public List<IssuedDeviceRecord> getIssuedDevicesByEmployee(Long employeeId) {
-
-        // ✅ USE REQUIRED REPOSITORY METHOD
-        repo.countActiveDevicesForEmployee(employeeId);
-
-        return repo.findAll();
+        return repo.findByEmployeeId(employeeId);
     }
 }
