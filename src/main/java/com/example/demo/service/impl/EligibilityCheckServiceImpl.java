@@ -1,12 +1,12 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.ResourceNotFoundException;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.example.demo.models.EligibilityCheckRecord;
 import com.example.demo.repository.EligibilityCheckRecordRepository;
 import com.example.demo.service.EligibilityCheckService;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class EligibilityCheckServiceImpl implements EligibilityCheckService {
@@ -19,10 +19,15 @@ public class EligibilityCheckServiceImpl implements EligibilityCheckService {
 
     @Override
     public EligibilityCheckRecord validateEligibility(Long employeeId, Long deviceItemId) {
+
         EligibilityCheckRecord record = new EligibilityCheckRecord();
         record.setEmployeeId(employeeId);
         record.setDeviceItemId(deviceItemId);
-        record.setEligible(true);
+
+        // ✅ CORRECT METHOD NAME
+        record.setIsEligible(true);
+        record.setReason("Eligible");
+
         return repo.save(record);
     }
 
