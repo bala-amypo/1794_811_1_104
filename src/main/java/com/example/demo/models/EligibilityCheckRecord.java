@@ -21,8 +21,14 @@ public class EligibilityCheckRecord {
         checkedAt = LocalDateTime.now();
     }
 
-    public void setEmployeeId(Long employeeId) { this.employeeId = employeeId; }
-    public void setDeviceItemId(Long deviceItemId) { this.deviceItemId = deviceItemId; }
-    public void setIsEligible(Boolean isEligible) { this.isEligible = isEligible; }
+    public void setEmployeeId(Long employeeId) { 
+    this.employeeId = employeeId;
+    }
+    public void setDeviceItemId(Long deviceItemId) {
+    this.deviceItemId = deviceItemId; 
+    }
+    public void setIsEligible(Boolean isEligible) { 
+    this.isEligible = isEligible; 
+    }
     public void setReason(String reason) { this.reason = reason; }
 }

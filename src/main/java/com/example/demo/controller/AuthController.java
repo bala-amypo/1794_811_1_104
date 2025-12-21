@@ -15,14 +15,13 @@ public class AuthController {
 
     private final UserAccountRepository userRepo;
 
-    // ✅ Local encoder (NO Spring bean required)
+   
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public AuthController(UserAccountRepository userRepo) {
         this.userRepo = userRepo;
     }
 
-    // ================= REGISTER =================
     @PostMapping("/register")
     public UserAccount register(@RequestBody UserAccount user) {
 
@@ -38,7 +37,6 @@ public class AuthController {
         return userRepo.save(user);
     }
 
-    // ================= LOGIN =================
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody Map<String, String> req) {
 
