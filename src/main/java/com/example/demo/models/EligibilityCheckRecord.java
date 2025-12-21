@@ -30,5 +30,7 @@ public class EligibilityCheckRecord {
     public void setIsEligible(Boolean isEligible) { 
     this.isEligible = isEligible; 
     }
-    public void setReason(String reason) { this.reason = reason; }
+    public void setReason(String reason) { 
+    this.reason = reason; 
+    }
 }
