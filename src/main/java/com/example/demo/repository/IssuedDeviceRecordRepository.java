@@ -16,7 +16,7 @@ public interface IssuedDeviceRecordRepository
     @Query("""
         SELECT COUNT(r)
         FROM IssuedDeviceRecord r
-        WHERE r.employeeId = :employeeId
+        WHERE r.employee.id = :employeeId
           AND r.returnedDate IS NULL
     """)
     Long countActiveDevicesForEmployee(Long employeeId);
@@ -25,8 +25,8 @@ public interface IssuedDeviceRecordRepository
     @Query("""
         SELECT r
         FROM IssuedDeviceRecord r
-        WHERE r.employeeId = :employeeId
-          AND r.deviceItemId = :deviceItemId
+        WHERE r.employee.id = :employeeId
+          AND r.deviceItem.id = :deviceItemId
           AND r.returnedDate IS NULL
     """)
     Optional<IssuedDeviceRecord> findActiveByEmployeeAndDevice(
