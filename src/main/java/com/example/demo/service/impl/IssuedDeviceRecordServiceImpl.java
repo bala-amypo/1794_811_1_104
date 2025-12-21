@@ -23,7 +23,7 @@ public class IssuedDeviceRecordServiceImpl
     public IssuedDeviceRecord issueDevice(IssuedDeviceRecord record) {
 
         record.setIssuedDate(LocalDate.now());
-        record.setReturnedDate(null);   // ✅ YOUR REQUIREMENT
+        record.setReturnedDate(null);   
         record.setStatus("ISSUED");
 
         return repo.save(record);
