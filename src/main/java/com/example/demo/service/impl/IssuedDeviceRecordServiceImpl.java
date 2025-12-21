@@ -23,11 +23,11 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
     @Override
     public IssuedDeviceRecord issueDevice(IssuedDeviceRecord record) {
 
-        // ❌ Ignore client-sent values completely
-        record.setId(null);                 // DB generates ID
-        record.setIssuedDate(LocalDate.now());
-        record.setReturnedDate(null);
-        record.setStatus("ISSUED");
+        // 🔒 Backend controls these fields
+        record.setId(null);                       // DB generates ID
+        record.setIssuedDate(LocalDate.now());    // issue date = today
+        record.setReturnedDate(null);             // ✅ MUST BE NULL
+        record.setStatus("ISSUED");               // issued state
 
         return repo.save(record);
     }
@@ -38,13 +38,13 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
 
         IssuedDeviceRecord record = repo.findById(recordId)
                 .orElseThrow(() ->
-                        new BadRequestException("already returned"));
+                        new BadRequestException("Issued device record not found"));
 
         if (record.getReturnedDate() != null) {
-            throw new BadRequestException("already returned");
+            throw new BadRequestException("Device already returned");
         }
 
-        record.setReturnedDate(LocalDate.now());
+        record.setReturnedDate(LocalDate.now());  // ✅ SET ONLY HERE
         record.setStatus("RETURNED");
 
         return repo.save(record);
