@@ -14,7 +14,7 @@ import java.util.Map;
 public class AuthController {
 
     private final UserAccountRepository userAccountRepository;
-    private final PasswordEncoder asswordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public AuthController(UserAccountRepository userAccountRepository,
                           PasswordEncoder passwordEncoder) {
