@@ -36,8 +36,8 @@ public class IssuedDeviceRecordController {
         return issuedService.returnDevice(id);
     }
 
-    @GetMapping("/employee/{employeeId}")
-    public List<IssuedDeviceRecord> getByEmployee(@PathVariable Long employeeId) {
-        return issuedService.getIssuedDevicesByEmployee(employeeId);
-    }
+   // @GetMapping("/employee/{employeeId}")
+   // public List<IssuedDeviceRecord> getByEmployee(@PathVariable Long employeeId) {
+   //     return issuedService.getIssuedDevicesByEmployee(employeeId);
+  //  }
 }
