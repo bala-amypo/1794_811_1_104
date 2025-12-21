@@ -16,10 +16,22 @@ public class UserAccount {
     private String role;
     private Boolean active = true;
 
-    public String getEmail() { return email; }
-    public String getPasswordHash() { return passwordHash; }
-    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
-    public void setActive(Boolean active) { this.active = active; }
+    public String getEmail() { 
+        return email; 
+        }
+    public String getPasswordHash() {
+         return passwordHash; 
+         }
+    public void setPasswordHash(String passwordHash) {
+         this.passwordHash = passwordHash;
+          }
+    public String getRole() {
+         return role; 
+         }
+    public void setRole(String role) {
+         this.role = role; 
+         }
+    public void setActive(Boolean active) {
+         this.active = active; 
+         }
 }

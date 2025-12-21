@@ -11,6 +11,5 @@ import com.example.demo.models.EligibilityCheckRecord;
 public interface EligibilityCheckRecordRepository
         extends JpaRepository<EligibilityCheckRecord, Long> {
 
-    // REQUIRED BY TEST CASE
     List<EligibilityCheckRecord> findByEmployeeId(Long employeeId);
 }

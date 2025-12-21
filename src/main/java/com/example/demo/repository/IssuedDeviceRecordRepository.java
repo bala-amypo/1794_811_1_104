@@ -12,7 +12,7 @@ import com.example.demo.models.IssuedDeviceRecord;
 public interface IssuedDeviceRecordRepository
         extends JpaRepository<IssuedDeviceRecord, Long> {
 
-    // REQUIRED BY TEST CASE
+  
     @Query("""
         SELECT COUNT(r)
         FROM IssuedDeviceRecord r
@@ -21,7 +21,7 @@ public interface IssuedDeviceRecordRepository
     """)
     Long countActiveDevicesForEmployee(Long employeeId);
 
-    // REQUIRED BY TEST CASE
+    
     @Query("""
         SELECT r
         FROM IssuedDeviceRecord r

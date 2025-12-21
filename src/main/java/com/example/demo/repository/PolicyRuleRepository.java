@@ -12,9 +12,9 @@ import com.example.demo.models.PolicyRule;
 public interface PolicyRuleRepository
         extends JpaRepository<PolicyRule, Long> {
 
-    // REQUIRED BY TEST CASE
+   
     List<PolicyRule> findByActiveTrue();
 
-    // REQUIRED BY TEST CASE
+   
     Optional<PolicyRule> findByRuleCode(String ruleCode);
 }

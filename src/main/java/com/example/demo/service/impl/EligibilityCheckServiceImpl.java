@@ -24,7 +24,7 @@ public class EligibilityCheckServiceImpl implements EligibilityCheckService {
         record.setEmployeeId(employeeId);
         record.setDeviceItemId(deviceItemId);
 
-        // ✅ CORRECT METHOD NAME
+       
         record.setIsEligible(true);
         record.setReason("Eligible");
 
