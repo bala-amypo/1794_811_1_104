@@ -29,7 +29,9 @@ public class EmployeeProfile {
         createdAt = LocalDateTime.now();
     }
 
-    public Long getId() { return id; }
+    public Long getId() { 
+    return id; 
+    }
     public String getEmployeeId() { 
     return employeeId; 
     }
