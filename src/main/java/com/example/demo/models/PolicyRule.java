@@ -21,17 +21,11 @@ public class PolicyRule {
     private Long id;
 
     private String ruleCode;
-
     private String description;
-
     private String appliesToRole;
-
     private String appliesToDepartment;
-
     private Integer maxDevicesAllowed;
-
     private Boolean active = true;
-
 
     public Long getId() {
         return id;
@@ -85,25 +79,24 @@ public class PolicyRule {
         this.active = active;
     }
 
-   
     public String getName() {
         return this.ruleCode;
     }
 
-   
     public boolean isEligible(EmployeeProfile employee, DeviceCatalogItem device) {
 
         if (Boolean.FALSE.equals(this.active)) {
-            return true; 
+            return true;
+        }
 
         if (appliesToRole != null &&
                 !appliesToRole.equalsIgnoreCase(employee.getJobRole())) {
-            return true; 
+            return true;
         }
 
         if (appliesToDepartment != null &&
                 !appliesToDepartment.equalsIgnoreCase(employee.getDepartment())) {
-            return true; 
+            return true;
         }
 
         return true;
