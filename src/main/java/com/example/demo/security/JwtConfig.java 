@@ -1,8 +1,8 @@
 package com.example.demo.config;
 
-import com.example.demo.security.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import com.example.demo.security.JwtTokenProvider;
 
 @Configuration
 public class JwtConfig {
@@ -11,7 +11,7 @@ public class JwtConfig {
     public JwtTokenProvider jwtTokenProvider() {
         return new JwtTokenProvider(
                 "mysupersecretkeymysupersecretkey123456", // ≥32 chars
-                3600000L // 1 hour
+                3600000L
         );
     }
 }
