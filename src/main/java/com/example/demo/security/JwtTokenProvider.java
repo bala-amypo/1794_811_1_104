@@ -1,47 +1,63 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.*;
 import java.util.Date;
+
+import javax.crypto.SecretKey;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 public class JwtTokenProvider {
 
-    private final String secret;
+    private final SecretKey key;
     private final long validityInMs;
 
-    // REQUIRED constructor (test suite expects this)
+    // 🔹 REQUIRED constructor (as per test constraints)
     public JwtTokenProvider(String secret, long validityInMs) {
-        this.secret = secret;
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
         this.validityInMs = validityInMs;
     }
 
+    // 🔐 CREATE TOKEN
     public String createToken(String email, String role) {
+
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("role", role);
 
         Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInMs);
+        Date expiry = new Date(now.getTime() + validityInMs);
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .setExpiration(expiry)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
+    // 🔍 GET EMAIL FROM TOKEN
+    public String getEmail(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+
+    // ✅ VALIDATE TOKEN
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
-    }
-
-    public String getEmail(String token) {
-        return Jwts.parser().setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
     }
 }
