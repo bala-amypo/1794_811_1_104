@@ -1,45 +1,37 @@
 package com.example.demo.controller;
 
-import java.util.Map;
-
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-
+import com.example.demo.dto.AuthRequest;
+import com.example.demo.dto.AuthResponse;
 import com.example.demo.models.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
+import com.example.demo.security.JwtTokenProvider;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
     private final UserAccountRepository userRepo;
+    private final JwtTokenProvider jwtProvider;
 
-   
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    public AuthController(UserAccountRepository userRepo) {
+    public AuthController(UserAccountRepository userRepo,
+                          JwtTokenProvider jwtProvider) {
         this.userRepo = userRepo;
-    }
-
-    @PostMapping("/register")
-    public UserAccount register(@RequestBody UserAccount user) {
-
-        user.setPasswordHash(
-                passwordEncoder.encode(user.getPasswordHash())
-        );
-
-        user.setActive(true);
-        if (user.getRole() == null) {
-            user.setRole("USER");
-        }
-
-        return userRepo.save(user);
+        this.jwtProvider = jwtProvider;
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody Map<String, String> req) {
+    public AuthResponse login(@RequestBody AuthRequest request) {
 
-        return Map.of("message", "Login successful");
+        UserAccount user = userRepo.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+
+        // (Assuming password already validated or plain for now)
+        String token = jwtProvider.createToken(
+                user.getEmail(),
+                user.getRole()
+        );
+
+        return new AuthResponse(token);
     }
 }
