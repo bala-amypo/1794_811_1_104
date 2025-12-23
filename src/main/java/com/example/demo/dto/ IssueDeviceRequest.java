@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-public class IssueDeviceRequest {
+public class IssuedDeviceRequest {
 
     private Long employeeId;
     private Long deviceItemId;
