@@ -90,6 +90,23 @@
             <scope>test</scope>
         </dependency>
 		
+
+
+
+
+
+		<!-- Keep everything same, but ensure this is the ONLY springdoc dependency -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+
+
+
+
+
+
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
