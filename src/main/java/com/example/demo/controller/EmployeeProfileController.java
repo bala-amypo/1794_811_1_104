@@ -1,21 +1,24 @@
 package com.example.demo.controller;
 
-import com.example.demo.models.Employee;
-import com.example.demo.service.EmployeeService;
+import com.example.demo.models.EmployeeProfile;
+import com.example.demo.repository.EmployeeProfileRepository;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeProfileController {
 
-    private final EmployeeService employeeService;
+    private final EmployeeProfileRepository employeeRepo;
 
-    public EmployeeProfileController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
+    public EmployeeProfileController(EmployeeProfileRepository employeeRepo) {
+        this.employeeRepo = employeeRepo;
     }
 
     @GetMapping("/{id}")
-    public Employee getEmployee(@PathVariable("id") Long id) {
-        return employeeService.getEmployeeById(id);
+    public EmployeeProfile getEmployee(
+            @PathVariable("id") Long id) {
+
+        return employeeRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
     }
 }
