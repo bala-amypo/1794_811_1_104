@@ -1,43 +1,34 @@
 package com.example.demo.controller;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.example.demo.dto.IssuedDeviceRequest;
 import com.example.demo.models.IssuedDeviceRecord;
 import com.example.demo.service.IssuedDeviceRecordService;
-
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/issued-devices")
-@Tag(name = "Issued Devices")
+@Tag(name = "Issued Device Records Endpoints")
 public class IssuedDeviceRecordController {
+    private final IssuedDeviceRecordService service;
 
-    private final IssuedDeviceRecordService issuedService;
-
-    public IssuedDeviceRecordController(IssuedDeviceRecordService issuedService) {
-        this.issuedService = issuedService;
+    public IssuedDeviceRecordController(IssuedDeviceRecordService service) {
+        this.service = service;
     }
 
-    // ✅ ISSUE DEVICE (using DTO)
     @PostMapping
-    public IssuedDeviceRecord issue(@RequestBody IssuedDeviceRequest request) {
-
-        IssuedDeviceRecord record = new IssuedDeviceRecord();
-        record.setEmployeeId(request.getEmployeeId());
-        record.setDeviceItemId(request.getDeviceItemId());
-
-        return issuedService.issueDevice(record);
+    public ResponseEntity<IssuedDeviceRecord> issue(@RequestBody IssuedDeviceRecord record) {
+        return ResponseEntity.ok(service.issueDevice(record));
     }
 
-    // ✅ RETURN DEVICE
     @PutMapping("/{id}/return")
-    public IssuedDeviceRecord returnDevice(@PathVariable Long id) {
-        return issuedService.returnDevice(id);
+    public ResponseEntity<IssuedDeviceRecord> returnDev(@PathVariable Long id) {
+        return ResponseEntity.ok(service.returnDevice(id));
+    }
+
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<List<IssuedDeviceRecord>> getByEmployee(@PathVariable Long employeeId) {
+        return ResponseEntity.ok(service.getIssuedDevicesByEmployee(employeeId));
     }
 }

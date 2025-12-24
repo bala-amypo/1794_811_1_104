@@ -1,41 +1,34 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.demo.models.PolicyRule;
 import com.example.demo.service.PolicyRuleService;
-
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/policy-rules")
-@Tag(name = "Policy Rules")
+@Tag(name = "Policy Rules Endpoints")
 public class PolicyRuleController {
+    private final PolicyRuleService service;
 
-    private final PolicyRuleService policyRuleService;
-
-    public PolicyRuleController(PolicyRuleService policyRuleService) {
-        this.policyRuleService = policyRuleService;
+    public PolicyRuleController(PolicyRuleService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public PolicyRule create(@RequestBody PolicyRule rule) {
-        return policyRuleService.createRule(rule);
+    public ResponseEntity<PolicyRule> create(@RequestBody PolicyRule rule) {
+        return ResponseEntity.ok(service.createRule(rule));
     }
 
     @GetMapping
-    public List<PolicyRule> getAll() {
-        return policyRuleService.getAllRules();
+    public ResponseEntity<List<PolicyRule>> getAll() {
+        return ResponseEntity.ok(service.getAllRules());
     }
 
     @GetMapping("/active")
-    public List<PolicyRule> getActive() {
-        return policyRuleService.getActiveRules();
+    public ResponseEntity<List<PolicyRule>> getActive() {
+        return ResponseEntity.ok(service.getActiveRules());
     }
 }

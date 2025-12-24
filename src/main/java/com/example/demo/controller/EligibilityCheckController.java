@@ -1,40 +1,29 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.demo.models.EligibilityCheckRecord;
 import com.example.demo.service.EligibilityCheckService;
-
 import io.swagger.v3.oas.annotations.tags.Tag;
-
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/eligibility")
-@Tag(name = "Eligibility Checks")
+@Tag(name = "Eligibility Check Endpoints")
 public class EligibilityCheckController {
+    private final EligibilityCheckService service;
 
-    private final EligibilityCheckService eligibilityService;
-
-    public EligibilityCheckController(EligibilityCheckService eligibilityService) {
-        this.eligibilityService = eligibilityService;
+    public EligibilityCheckController(EligibilityCheckService service) {
+        this.service = service;
     }
 
     @PostMapping("/validate/{employeeId}/{deviceItemId}")
-    public EligibilityCheckRecord validate(
-            @PathVariable Long employeeId,
-            @PathVariable Long deviceItemId) {
-
-        return eligibilityService.validateEligibility(employeeId, deviceItemId);
+    public ResponseEntity<EligibilityCheckRecord> validate(@PathVariable Long employeeId, @PathVariable Long deviceItemId) {
+        return ResponseEntity.ok(service.validateEligibility(employeeId, deviceItemId));
     }
 
     @GetMapping("/employee/{employeeId}")
-    public List<EligibilityCheckRecord> getByEmployee(@PathVariable Long employeeId) {
-        return eligibilityService.getChecksByEmployee(employeeId);
+    public ResponseEntity<List<EligibilityCheckRecord>> getByEmployee(@PathVariable Long employeeId) {
+        return ResponseEntity.ok(service.getChecksByEmployee(employeeId));
     }
 }

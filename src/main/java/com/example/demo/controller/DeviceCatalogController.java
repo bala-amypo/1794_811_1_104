@@ -1,37 +1,34 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.models.DeviceCatalogItem;
 import com.example.demo.service.DeviceCatalogService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/devices")
+@Tag(name = "Device Catalog Endpoints")
 public class DeviceCatalogController {
+    private final DeviceCatalogService service;
 
-    @Autowired
-    private DeviceCatalogService deviceCatalogService;
+    public DeviceCatalogController(DeviceCatalogService service) {
+        this.service = service;
+    }
 
-   
     @PostMapping
-    public DeviceCatalogItem createDevice(@RequestBody DeviceCatalogItem item) {
-        return deviceCatalogService.createItem(item);
+    public ResponseEntity<DeviceCatalogItem> create(@RequestBody DeviceCatalogItem item) {
+        return ResponseEntity.ok(service.createItem(item));
     }
 
-   
-    @PutMapping("/{id}/active")
-    public DeviceCatalogItem updateActiveStatus(
-            @PathVariable Long id,
-            @RequestParam boolean active) {
-        return deviceCatalogService.updateActiveStatus(id, active);
-    }
-
-   
     @GetMapping
-    public List<DeviceCatalogItem> getAllDevices() {
-        return deviceCatalogService.getAllItems();
+    public ResponseEntity<List<DeviceCatalogItem>> getAll() {
+        return ResponseEntity.ok(service.getAllItems());
+    }
+
+    @PutMapping("/{id}/active")
+    public ResponseEntity<DeviceCatalogItem> updateStatus(@PathVariable Long id, @RequestParam boolean active) {
+        return ResponseEntity.ok(service.updateActiveStatus(id, active));
     }
 }
