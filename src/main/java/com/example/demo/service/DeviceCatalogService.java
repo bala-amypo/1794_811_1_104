@@ -1,7 +1,4 @@
 package com.example.demo.service;
-
-
-
 import com.example.demo.models.DeviceCatalogItem;
 import java.util.List;
 
