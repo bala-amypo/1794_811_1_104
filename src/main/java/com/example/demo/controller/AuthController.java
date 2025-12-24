@@ -1,64 +1,50 @@
 package com.example.demo.controller;
 
-// 🔹 Spring imports
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-// 🔹 Project imports
 import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
-import com.example.demo.dto.RegisterRequest;
 import com.example.demo.models.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.security.JwtTokenProvider;
+import com.example.demo.exception.BadRequestException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserAccountRepository userRepo;
+    private final UserAccountRepository userAccountRepository;
     private final JwtTokenProvider jwtProvider;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthController(UserAccountRepository userRepo,
-                          JwtTokenProvider jwtProvider) {
-        this.userRepo = userRepo;
+    public AuthController(UserAccountRepository userAccountRepository, 
+                          JwtTokenProvider jwtProvider, 
+                          PasswordEncoder passwordEncoder) {
+        this.userAccountRepository = userAccountRepository;
         this.jwtProvider = jwtProvider;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    // ✅ REGISTER
     @PostMapping("/register")
-    public String register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody UserAccount user) {
+        if (userAccountRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new BadRequestException("Email already exists");
+        }
+        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
+        return ResponseEntity.ok(userAccountRepository.save(user));
+    }
 
-        if (userRepo.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists");
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
+        UserAccount user = userAccountRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new BadRequestException("Invalid credentials"));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
+            throw new BadRequestException("Invalid credentials");
         }
 
-        UserAccount user = new UserAccount();
-        user.setFullName(request.getFullName());
-        user.setEmail(request.getEmail());
-        user.setPasswordHash(request.getPassword()); // plain for now
-        user.setRole(request.getRole());
-        user.setActive(true);
-
-        userRepo.save(user);
-
-        return "User registered successfully";
-    }
-
-    // ✅ LOGIN
-    @PostMapping("/login")
-    public AuthResponse login(@RequestBody AuthRequest request) {
-
-        UserAccount user = userRepo.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
-
-        String token = jwtProvider.createToken(
-                user.getEmail(),
-                user.getRole()
-        );
-
-        return new AuthResponse(token);
+        String token = jwtProvider.generateToken(user);
+        return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getEmail(), user.getRole()));
     }
 }
