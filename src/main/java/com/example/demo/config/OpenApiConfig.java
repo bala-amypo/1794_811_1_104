@@ -14,26 +14,21 @@ import java.util.List;
 @Configuration
 public class OpenApiConfig {
 
-    @Bean
+    @Bean(name = "customOpenApiBean")   // ⭐ FIX IS HERE
     public OpenAPI customOpenAPI() {
 
-        // 🔐 ADD THIS (JWT Security Scheme)
         SecurityScheme bearerAuth = new SecurityScheme()
                 .type(SecurityScheme.Type.HTTP)
                 .scheme("bearer")
                 .bearerFormat("JWT");
 
         return new OpenAPI()
-                // ✅ existing code (unchanged)
                 .servers(List.of(
                         new Server().url("https://9400.pro604cr.amypo.ai/")
                 ))
-                // 🔐 ADD THIS
                 .components(
-                        new Components()
-                                .addSecuritySchemes("bearerAuth", bearerAuth)
+                        new Components().addSecuritySchemes("bearerAuth", bearerAuth)
                 )
-                // 🔐 ADD THIS
                 .addSecurityItem(
                         new SecurityRequirement().addList("bearerAuth")
                 );
