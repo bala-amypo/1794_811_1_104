@@ -1,46 +1,32 @@
-private final UserAccountRepository userAccountRepository;
-private final JwtTokenProvider jwtProvider;
-private final PasswordEncoder passwordEncoder;
+package com.example.demo.repository;
 
-// CONSTRUCTOR INJECTION (Strict Constraint)
-public AuthController(UserAccountRepository userAccountRepository, 
-                      JwtTokenProvider jwtProvider, 
-                      PasswordEncoder passwordEncoder) {
-    this.userAccountRepository = userAccountRepository;
-    this.jwtProvider = jwtProvider;
-    this.passwordEncoder = passwordEncoder;
-}
+import com.example.demo.models.UserAccount;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
+import java.util.List;
 
-@PostMapping("/register")
-@Operation(summary = "Register a new UserAccount")
-public ResponseEntity<UserAccount> register(@RequestBody UserAccount user) {
-    if (userAccountRepository.findByEmail(user.getEmail()).isPresent()) {
-        throw new BadRequestException("Email already exists");
-    }
-    user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
-    return ResponseEntity.ok(userAccountRepository.save(user));
-}
+/**
+ * STEP 3 & 4 - UserAccountRepository
+ * Extends JpaRepository to provide standard CRUD operations for the UserAccount entity.
+ * Required for Authentication, JWT logic, and User Management.
+ */
+public interface UserAccountRepository extends JpaRepository<UserAccount, Long> {
 
-@PostMapping("/login")
-@Operation(summary = "Login and receive JWT Token")
-public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
-    UserAccount user = userAccountRepository.findByEmail(request.getEmail())
-            .orElseThrow(() -> new BadRequestException("Invalid email or password"));
+    /**
+     * Required for Spring Security's CustomUserDetailsService and AuthController login.
+     * Exact naming required as per Section 4 of the Test Case Helper Document.
+     * 
+     * @param email The unique email of the user account.
+     * @return An Optional containing the UserAccount if found.
+     */
+    Optional<UserAccount> findByEmail(String email);
 
-    if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
-        throw new BadRequestException("Invalid email or password");
-    }
-
-    String token = jwtProvider.generateToken(user);
-    return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getEmail(), user.getRole()));
-}
-
-@GetMapping("/me")
-@Operation(summary = "Get current authenticated user info (Requires JWT)")
-public ResponseEntity<UserAccount> getCurrentUser(@RequestHeader("Authorization") String authHeader) {
-    String token = authHeader.substring(7);
-    String email = jwtProvider.getUsername(token);
-    return userAccountRepository.findByEmail(email)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+    /**
+     * Retrieves all user accounts registered in the system.
+     * Provided by JpaRepository, but explicitly mentioned here as per repository requirements.
+     * 
+     * @return A list of all UserAccount entities.
+     */
+    @Override
+    List<UserAccount> findAll();
 }
