@@ -12,6 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * STEP 2 & 5 – AuthController
+ * Handles user registration and JWT-based authentication.
+ */
 @RestController
 @RequestMapping("/auth")
 @Tag(name = "Authentication Endpoints")
@@ -21,7 +25,7 @@ public class AuthController {
     private final JwtTokenProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
 
-    // Constructor Injection as per Technical Constraints
+    // CONSTRUCTOR INJECTION - Required for automated testing
     public AuthController(UserAccountRepository userAccountRepository, 
                           JwtTokenProvider jwtProvider, 
                           PasswordEncoder passwordEncoder) {
@@ -30,17 +34,27 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * POST /auth/register
+     * Logic: Verifies unique email, hashes password, and saves the account.
+     */
     @PostMapping("/register")
     @Operation(summary = "Register a new UserAccount")
     public ResponseEntity<UserAccount> register(@RequestBody UserAccount user) {
         if (userAccountRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new BadRequestException("Email already exists");
         }
-        // Hash password before saving
+        
+        // Technical Constraint: Password must be hashed via BCrypt before storage
         user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
+        
         return ResponseEntity.ok(userAccountRepository.save(user));
     }
 
+    /**
+     * POST /auth/login
+     * Logic: Validates credentials and returns a JWT token in AuthResponse.
+     */
     @PostMapping("/login")
     @Operation(summary = "Login and receive JWT Token")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
@@ -53,10 +67,19 @@ public class AuthController {
 
         String token = jwtProvider.generateToken(user);
         
-        // Return only the token to match your screenshot output
-        return ResponseEntity.ok(new AuthResponse(token));
+        // AuthResponse matches Section 3 DTO requirements: token, userId, email, role
+        return ResponseEntity.ok(new AuthResponse(
+                token, 
+                user.getId(), 
+                user.getEmail(), 
+                user.getRole()
+        ));
     }
 
+    /**
+     * GET /auth/me
+     * Logic: Extracts user details from the JWT token for the current session.
+     */
     @GetMapping("/me")
     @Operation(summary = "Get current authenticated user info (Requires JWT)")
     public ResponseEntity<UserAccount> getCurrentUser(@RequestHeader("Authorization") String authHeader) {
