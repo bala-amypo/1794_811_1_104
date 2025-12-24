@@ -1,37 +1,37 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.models.DeviceCatalogItem;
 import com.example.demo.repository.DeviceCatalogItemRepository;
 import com.example.demo.service.DeviceCatalogService;
+import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class DeviceCatalogServiceImpl implements DeviceCatalogService {
+    private final DeviceCatalogItemRepository repository;
 
-    @Autowired
-    private DeviceCatalogItemRepository repo;
+    public DeviceCatalogServiceImpl(DeviceCatalogItemRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public DeviceCatalogItem createItem(DeviceCatalogItem item) {
-        return repo.save(item);
+        if (item.getMaxAllowedPerEmployee() != null && item.getMaxAllowedPerEmployee() < 1) {
+            throw new BadRequestException("maxAllowedPerEmployee");
+        }
+        return repository.save(item);
     }
 
     @Override
     public DeviceCatalogItem updateActiveStatus(Long id, boolean active) {
-        DeviceCatalogItem existingItem = repo.findById(id).orElse(null);
-        if (existingItem != null) {
-            existingItem.setActive(active); 
-            return repo.save(existingItem);
-        }
-        return null;
+        DeviceCatalogItem item = repository.findById(id).orElseThrow();
+        item.setActive(active);
+        return repository.save(item);
     }
 
     @Override
     public List<DeviceCatalogItem> getAllItems() {
-        return repo.findAll();
+        return repository.findAll();
     }
 }
