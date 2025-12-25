@@ -1,36 +1,46 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.repository.*;
+import com.example.demo.model.EligibilityCheckRecord;
+import com.example.demo.model.EmployeeProfile;
+import com.example.demo.repository.DeviceCatalogItemRepository;
+import com.example.demo.repository.EmployeeProfileRepository;
+import com.example.demo.repository.IssuedDeviceRecordRepository;
 import com.example.demo.service.EligibilityCheckService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EligibilityCheckServiceImpl implements EligibilityCheckService {
 
+    private final EmployeeProfileRepository employeeRepo;
     private final IssuedDeviceRecordRepository issuedRepo;
+    private final DeviceCatalogItemRepository deviceRepo;
 
-    // ✅ NEW constructor (used by Spring)
-    public EligibilityCheckServiceImpl(
-            IssuedDeviceRecordRepository issuedRepo
-    ) {
-        this.issuedRepo = issuedRepo;
-    }
-
-    // 🔁 OLD constructor REQUIRED BY TESTS
+    // ✅ SINGLE CONSTRUCTOR (Spring will auto-inject)
     public EligibilityCheckServiceImpl(
             EmployeeProfileRepository employeeRepo,
-            DeviceCatalogItemRepository deviceRepo,
             IssuedDeviceRecordRepository issuedRepo,
-            PolicyRuleRepository policyRepo,
-            EligibilityCheckRecordRepository eligibilityRepo
+            DeviceCatalogItemRepository deviceRepo
     ) {
+        this.employeeRepo = employeeRepo;
         this.issuedRepo = issuedRepo;
+        this.deviceRepo = deviceRepo;
     }
 
     @Override
-    public boolean isEligible(Long employeeId, Long deviceId) {
-        return issuedRepo
-                .findActiveByEmployeeAndDevice(employeeId, deviceId)
-                .isEmpty();
+    public EligibilityCheckRecord checkEligibility(Long employeeId, Long deviceId) {
+
+        EmployeeProfile employee = employeeRepo.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        long issuedCount = issuedRepo.findAll()
+                .stream()
+                .filter(r -> r.getEmployeeId().equals(employee.getEmployeeId()))
+                .count();
+
+        EligibilityCheckRecord record = new EligibilityCheckRecord();
+        record.setEmployeeId(employee.getEmployeeId());
+        record.setEligible(issuedCount < 1); // simple rule
+
+        return record;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
-public interface EligibilityCheckService {
+import com.example.demo.model.EligibilityCheckRecord;
 
-    boolean isEligible(Long employeeId, Long deviceId);
+public interface EligibilityCheckService {
+    EligibilityCheckRecord checkEligibility(Long employeeId, Long deviceId);
 }
