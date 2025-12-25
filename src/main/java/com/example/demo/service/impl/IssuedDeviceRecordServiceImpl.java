@@ -16,8 +16,9 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
         this.repo = repo;
     }
 
+    // ✅ METHOD NAME FIXED
     @Override
-    public IssuedDeviceRecord issuedDevice(IssuedDeviceRecord record) {
+    public IssuedDeviceRecord issueDevice(IssuedDeviceRecord record) {
         record.setStatus("ISSUED");
         return repo.save(record);
     }
@@ -29,7 +30,6 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
         return repo.save(record);
     }
 
-    // ✅ REQUIRED METHOD (FIXES ERROR)
     @Override
     public List<IssuedDeviceRecord> getIssuedDevicesByEmployee(Long employeeId) {
         return repo.findAll()
