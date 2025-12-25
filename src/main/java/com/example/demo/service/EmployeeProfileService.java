@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.models.EmployeeProfile;
+import com.example.demo.model.EmployeeProfile;
 import java.util.List;
 
 public interface EmployeeProfileService {

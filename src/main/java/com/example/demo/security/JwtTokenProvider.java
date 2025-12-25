@@ -1,6 +1,6 @@
 package com.example.demo.security;
 
-import com.example.demo.models.UserAccount;
+import com.example.demo.model.UserAccount;
 import io.jsonwebtoken.*;
 import java.util.Date;
 
