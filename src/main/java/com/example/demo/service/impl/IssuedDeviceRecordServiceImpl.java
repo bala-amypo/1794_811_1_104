@@ -5,6 +5,8 @@ import com.example.demo.repository.IssuedDeviceRecordRepository;
 import com.example.demo.service.IssuedDeviceRecordService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService {
 
@@ -16,6 +18,7 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
 
     @Override
     public IssuedDeviceRecord issuedDevice(IssuedDeviceRecord record) {
+        record.setStatus("ISSUED");
         return repo.save(record);
     }
 
@@ -24,5 +27,14 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
         IssuedDeviceRecord record = repo.findById(recordId).orElseThrow();
         record.setStatus("RETURNED");
         return repo.save(record);
+    }
+
+    // ✅ REQUIRED METHOD (FIXES ERROR)
+    @Override
+    public List<IssuedDeviceRecord> getIssuedDevicesByEmployee(Long employeeId) {
+        return repo.findAll()
+                .stream()
+                .filter(r -> r.getEmployeeId().equals(employeeId))
+                .toList();
     }
 }
