@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.models.EmployeeProfile;
+import com.example.demo.model.EmployeeProfile;
 import com.example.demo.service.EmployeeProfileService;
 import org.springframework.web.bind.annotation.*;
 

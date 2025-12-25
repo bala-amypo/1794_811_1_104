@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.models.DeviceCatalogItem;
+import com.example.demo.model.DeviceCatalogItem;
 import com.example.demo.service.DeviceCatalogService;
 import org.springframework.web.bind.annotation.*;
 

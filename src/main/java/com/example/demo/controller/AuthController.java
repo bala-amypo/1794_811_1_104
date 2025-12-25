@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.dto.RegisterRequest;
-import com.example.demo.models.UserAccount;
+import com.example.demo.model.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.security.JwtTokenProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.models.IssuedDeviceRecord;
+import com.example.demo.model.IssuedDeviceRecord;
 import com.example.demo.service.IssuedDeviceRecordService;
 import org.springframework.web.bind.annotation.*;
 
