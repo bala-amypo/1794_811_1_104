@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.EligibilityCheckRecord;
 import com.example.demo.service.EligibilityCheckService;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,11 +14,12 @@ public class EligibilityCheckController {
         this.service = service;
     }
 
-    @GetMapping
-    public boolean checkEligibility(
+    @GetMapping("/check")
+    public EligibilityCheckRecord checkEligibility(
             @RequestParam Long employeeId,
             @RequestParam Long deviceId
     ) {
-        return service.isEligible(employeeId, deviceId);
+        // ✅ correct method name
+        return service.checkEligibility(employeeId, deviceId);
     }
 }
