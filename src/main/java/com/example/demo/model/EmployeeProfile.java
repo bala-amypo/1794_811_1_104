@@ -11,14 +11,14 @@ public class EmployeeProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String employeeId;   // ✅ REQUIRED
+    private String employeeId;
     private String name;
-    private String email;        // ✅ REQUIRED
+    private String email;
     private String role;
     private String department;
     private Boolean active = true;
 
-    private LocalDateTime createdAt; // ✅ REQUIRED
+    private LocalDateTime createdAt;
 
     /* ===== GETTERS ===== */
 
@@ -26,7 +26,7 @@ public class EmployeeProfile {
         return id;
     }
 
-    public String getEmployeeId() {          // ✅ REQUIRED
+    public String getEmployeeId() {
         return employeeId;
     }
 
@@ -34,7 +34,7 @@ public class EmployeeProfile {
         return name;
     }
 
-    public String getEmail() {               // ✅ REQUIRED
+    public String getEmail() {
         return email;
     }
 
@@ -60,4 +60,31 @@ public class EmployeeProfile {
         this.id = id;
     }
 
-    public vo
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+}
