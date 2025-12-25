@@ -15,7 +15,6 @@ public class EligibilityCheckServiceImpl implements EligibilityCheckService {
     private final IssuedDeviceRecordRepository issuedRepo;
     private final DeviceCatalogItemRepository deviceRepo;
 
-    // ✅ SINGLE CONSTRUCTOR (Spring will auto-inject)
     public EligibilityCheckServiceImpl(
             EmployeeProfileRepository employeeRepo,
             IssuedDeviceRecordRepository issuedRepo,
@@ -38,8 +37,11 @@ public class EligibilityCheckServiceImpl implements EligibilityCheckService {
                 .count();
 
         EligibilityCheckRecord record = new EligibilityCheckRecord();
-        record.setEmployeeId(employee.getEmployeeId());
-        record.setEligible(issuedCount < 1); // simple rule
+
+        // ✅ FIXED TYPES
+        record.setEmployeeId(employeeId);
+        record.setDeviceId(deviceId);
+        record.setEligible(issuedCount < 1);
 
         return record;
     }
