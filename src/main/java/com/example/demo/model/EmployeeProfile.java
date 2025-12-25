@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "employee_profiles")
@@ -10,19 +11,53 @@ public class EmployeeProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String employeeId;   // ✅ REQUIRED
     private String name;
+    private String email;        // ✅ REQUIRED
     private String role;
     private String department;
     private Boolean active = true;
 
-    public Long getId() { return id; }
-    public String getName() { return name; }
-    public String getRole() { return role; }
-    public String getDepartment() { return department; }
-    public Boolean getActive() { return active; }
+    private LocalDateTime createdAt; // ✅ REQUIRED
 
-    public void setName(String name) { this.name = name; }
-    public void setRole(String role) { this.role = role; }
-    public void setDepartment(String department) { this.department = department; }
-    public void setActive(Boolean active) { this.active = active; }
-}
+    /* ===== GETTERS ===== */
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getEmployeeId() {          // ✅ REQUIRED
+        return employeeId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {               // ✅ REQUIRED
+        return email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    /* ===== SETTERS ===== */
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public vo
