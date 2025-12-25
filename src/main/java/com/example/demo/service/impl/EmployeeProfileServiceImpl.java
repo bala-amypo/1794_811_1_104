@@ -5,39 +5,55 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.models.EmployeeProfile;
 import com.example.demo.repository.EmployeeProfileRepository;
 import com.example.demo.service.EmployeeProfileService;
-import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class EmployeeProfileServiceImpl implements EmployeeProfileService {
-    private final EmployeeProfileRepository repository;
 
-    public EmployeeProfileServiceImpl(EmployeeProfileRepository repository) {
-        this.repository = repository;
+    private final EmployeeProfileRepository repo;
+
+    // ✅ Constructor Injection (MANDATORY)
+    public EmployeeProfileServiceImpl(EmployeeProfileRepository repo) {
+        this.repo = repo;
     }
 
     @Override
     public EmployeeProfile createEmployee(EmployeeProfile employee) {
-        if (repository.findByEmployeeId(employee.getEmployeeId()).isPresent()) {
+
+        if (repo.findByEmployeeId(employee.getEmployeeId()).isPresent()) {
             throw new BadRequestException("EmployeeId already exists");
         }
-        return repository.save(employee);
+
+        if (repo.findByEmail(employee.getEmail()).isPresent()) {
+            throw new BadRequestException("Email already exists");
+        }
+
+        employee.setCreatedAt(LocalDateTime.now());
+        employee.setActive(true);
+
+        return repo.save(employee);
     }
 
     @Override
     public EmployeeProfile getEmployeeById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee"));
+        return repo.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Employee not found"));
     }
 
     @Override
     public List<EmployeeProfile> getAllEmployees() {
-        return repository.findAll();
+        return repo.findAll();
     }
 
     @Override
     public EmployeeProfile updateEmployeeStatus(Long id, boolean active) {
         EmployeeProfile employee = getEmployeeById(id);
         employee.setActive(active);
-        return repository.save(employee);
+        return repo.save(employee);
     }
 }
