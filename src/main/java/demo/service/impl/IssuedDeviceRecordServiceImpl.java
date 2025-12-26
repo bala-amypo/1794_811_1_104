@@ -1,40 +1,42 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.IssuedDeviceRecord;
-import com.example.demo.repository.IssuedDeviceRecordRepository;
+import com.example.demo.repository.*;
 import com.example.demo.service.IssuedDeviceRecordService;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService {
 
-    private final IssuedDeviceRecordRepository repo;
+    private final IssuedDeviceRecordRepository issuedRepo;
+    private final EmployeeProfileRepository employeeRepo;
+    private final DeviceCatalogItemRepository deviceRepo;
 
-    public IssuedDeviceRecordServiceImpl(IssuedDeviceRecordRepository repo) {
-        this.repo = repo;
+    public IssuedDeviceRecordServiceImpl(
+            IssuedDeviceRecordRepository issuedRepo,
+            EmployeeProfileRepository employeeRepo,
+            DeviceCatalogItemRepository deviceRepo) {
+        this.issuedRepo = issuedRepo;
+        this.employeeRepo = employeeRepo;
+        this.deviceRepo = deviceRepo;
     }
 
-    // ✅ METHOD NAME FIXED
     @Override
-    public IssuedDeviceRecord issueDevice(IssuedDeviceRecord record) {
-        record.setStatus("ISSUED");
-        return repo.save(record);
+    public IssuedDeviceRecord issuedDevice(IssuedDeviceRecord record) {
+        return issuedRepo.save(record);
     }
 
     @Override
     public IssuedDeviceRecord returnDevice(Long recordId) {
-        IssuedDeviceRecord record = repo.findById(recordId).orElseThrow();
-        record.setStatus("RETURNED");
-        return repo.save(record);
-    }
+        IssuedDeviceRecord record = issuedRepo.findById(recordId)
+                .orElseThrow(() -> new BadRequestException("Record not found"));
 
-    @Override
-    public List<IssuedDeviceRecord> getIssuedDevicesByEmployee(Long employeeId) {
-        return repo.findAll()
-                .stream()
-                .filter(r -> r.getEmployeeId().equals(employeeId))
-                .toList();
+        if ("RETURNED".equals(record.getStatus())) {
+            throw new BadRequestException("Device already returned");
+        }
+
+        record.setStatus("RETURNED");
+        return issuedRepo.save(record);
     }
 }

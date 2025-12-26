@@ -5,55 +5,46 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.EmployeeProfile;
 import com.example.demo.repository.EmployeeProfileRepository;
 import com.example.demo.service.EmployeeProfileService;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class EmployeeProfileServiceImpl implements EmployeeProfileService {
 
     private final EmployeeProfileRepository repo;
 
-    // ✅ Constructor Injection (MANDATORY)
     public EmployeeProfileServiceImpl(EmployeeProfileRepository repo) {
         this.repo = repo;
     }
 
     @Override
-    public EmployeeProfile createEmployee(EmployeeProfile employee) {
-
-        if (repo.findByEmployeeId(employee.getEmployeeId()).isPresent()) {
+    public EmployeeProfile createEmployee(EmployeeProfile emp) {
+        if (repo.findByEmployeeId(emp.getEmployeeId()).isPresent()) {
             throw new BadRequestException("EmployeeId already exists");
         }
-
-        if (repo.findByEmail(employee.getEmail()).isPresent()) {
+        if (repo.findByEmail(emp.getEmail()).isPresent()) {
             throw new BadRequestException("Email already exists");
         }
+        return repo.save(emp);
+    }
 
-        employee.setCreatedAt(LocalDateTime.now());
-        employee.setActive(true);
-
-        return repo.save(employee);
+    @Override
+    public EmployeeProfile updateEmployeeStatus(Long id, boolean active) {
+        EmployeeProfile emp = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+        emp.setActive(active);
+        return repo.save(emp);
     }
 
     @Override
     public EmployeeProfile getEmployeeById(Long id) {
         return repo.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Employee not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
     }
 
     @Override
     public List<EmployeeProfile> getAllEmployees() {
         return repo.findAll();
-    }
-
-    @Override
-    public EmployeeProfile updateEmployeeStatus(Long id, boolean active) {
-        EmployeeProfile employee = getEmployeeById(id);
-        employee.setActive(active);
-        return repo.save(employee);
     }
 }

@@ -5,11 +5,11 @@ import java.util.List;
 
 public interface EmployeeProfileService {
 
-    EmployeeProfile createEmployee(EmployeeProfile employee);
+    EmployeeProfile createEmployee(EmployeeProfile emp);
+
+    EmployeeProfile updateEmployeeStatus(Long id, boolean active);
 
     EmployeeProfile getEmployeeById(Long id);
 
     List<EmployeeProfile> getAllEmployees();
-
-    EmployeeProfile updateEmployeeStatus(Long id, boolean active);
 }
