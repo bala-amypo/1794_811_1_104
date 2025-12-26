@@ -69,8 +69,43 @@ public class EligibilityCheckServiceImpl implements EligibilityCheckService {
         }
 
         Long issuedCount = issuedRepo.countActiveDevicesForEmployee(employeeId);
+
         if (dev.getMaxAllowedPerEmployee() != null &&
                 issuedCount >= dev.getMaxAllowedPerEmployee()) {
             rec.setIsEligible(false);
             rec.setReason("Maximum allowed devices reached");
-            return eligibilityRep
+            return eligibilityRepo.save(rec);
+        }
+
+        List<PolicyRule> rules = policyRepo.findByActiveTrue();
+
+        for (PolicyRule rule : rules) {
+
+            boolean deptMatch =
+                    rule.getAppliesToDepartment() == null ||
+                    rule.getAppliesToDepartment().equals(emp.getDepartment());
+
+            boolean roleMatch =
+                    rule.getAppliesToRole() == null ||
+                    rule.getAppliesToRole().equals(emp.getJobRole());
+
+            if (deptMatch && roleMatch) {
+                if (rule.getMaxDevicesAllowed() != null &&
+                        issuedCount >= rule.getMaxDevicesAllowed()) {
+                    rec.setIsEligible(false);
+                    rec.setReason("Policy violation");
+                    return eligibilityRepo.save(rec);
+                }
+            }
+        }
+
+        rec.setIsEligible(true);
+        rec.setReason("Eligible");
+        return eligibilityRepo.save(rec);
+    }
+
+    @Override
+    public List<EligibilityCheckRecord> getChecksByEmployee(Long employeeId) {
+        return eligibilityRepo.findByEmployeeId(employeeId);
+    }
+}
