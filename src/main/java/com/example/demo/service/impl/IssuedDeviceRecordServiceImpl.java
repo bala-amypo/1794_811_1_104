@@ -44,8 +44,9 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
         IssuedDeviceRecord record = recordRepo.findById(recordId)
                 .orElseThrow(() -> new BadRequestException("Issued record not found"));
 
-        // ✅ THIS MAKES testReturnDeviceAlreadyReturned PASS
-        if ("RETURNED".equals(record.getStatus())) {
+        // ✅ FINAL TEST-SAFE + REAL-WORLD SAFE CHECK
+        if (record.getReturnedDate() != null
+                || "RETURNED".equals(record.getStatus())) {
             throw new BadRequestException("Device already returned");
         }
 
