@@ -6,6 +6,7 @@ import com.example.demo.repository.DeviceCatalogItemRepository;
 import com.example.demo.repository.EmployeeProfileRepository;
 import com.example.demo.repository.IssuedDeviceRecordRepository;
 import com.example.demo.service.IssuedDeviceRecordService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,12 +17,13 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
 
     private final IssuedDeviceRecordRepository recordRepo;
 
-    // ✅ Constructor used by Spring Boot
+    // ✅ Constructor USED BY SPRING BOOT
+    @Autowired
     public IssuedDeviceRecordServiceImpl(IssuedDeviceRecordRepository recordRepo) {
         this.recordRepo = recordRepo;
     }
 
-    // ✅ Constructor REQUIRED by TestNG tests
+    // ✅ Constructor USED ONLY BY TESTS
     public IssuedDeviceRecordServiceImpl(
             IssuedDeviceRecordRepository recordRepo,
             EmployeeProfileRepository employeeRepo,
@@ -44,7 +46,6 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
         IssuedDeviceRecord record = recordRepo.findById(recordId)
                 .orElseThrow(() -> new BadRequestException("Issued record not found"));
 
-        // ✅ FINAL TEST-SAFE + REAL-WORLD SAFE CHECK
         if (record.getReturnedDate() != null
                 || "RETURNED".equals(record.getStatus())) {
             throw new BadRequestException("Device already returned");
