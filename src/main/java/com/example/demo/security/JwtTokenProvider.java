@@ -10,16 +10,13 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private final String secretKey;
-    private final long validityInMs;
+    private final String secretKey = "my-secret-key";
+    private final long validityInMs = 86400000; // 1 day
 
-    // ✅ CONSTRUCTOR (matches JwtConfig)
-    public JwtTokenProvider(String secretKey, long validityInMs) {
-        this.secretKey = secretKey;
-        this.validityInMs = validityInMs;
-    }
+    // ✅ NO constructor arguments (important)
+    public JwtTokenProvider() {}
 
-    // ✅ Generate token
+    // generate token
     public String generateToken(String email) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + validityInMs);
@@ -32,7 +29,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // ✅ Validate token
+    // validate token
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
@@ -42,13 +39,12 @@ public class JwtTokenProvider {
         }
     }
 
-    // ✅ Extract username
+    // extract email
     public String getUsername(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
-
         return claims.getSubject();
     }
 }
