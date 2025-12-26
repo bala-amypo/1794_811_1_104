@@ -3,7 +3,7 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "device_catalog_items")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "deviceCode"))
 public class DeviceCatalogItem {
 
     @Id
@@ -12,19 +12,63 @@ public class DeviceCatalogItem {
 
     private String deviceCode;
     private String deviceType;
+
+    // ✅ REQUIRED BY TESTS
+    private String model;
+
     private Integer maxAllowedPerEmployee;
     private Boolean active = true;
 
-    public Long getId() { return id; }
-    public String getDeviceCode() { return deviceCode; }
-    public String getDeviceType() { return deviceType; }
-    public Integer getMaxAllowedPerEmployee() { return maxAllowedPerEmployee; }
-    public Boolean getActive() { return active; }
+    /* ===== GETTERS & SETTERS ===== */
 
-    public void setDeviceCode(String deviceCode) { this.deviceCode = deviceCode; }
-    public void setDeviceType(String deviceType) { this.deviceType = deviceType; }
+    public Long getId() {
+        return id;
+    }
+
+    // ✅ REQUIRED BY TESTS
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getDeviceCode() {
+        return deviceCode;
+    }
+
+    public void setDeviceCode(String deviceCode) {
+        this.deviceCode = deviceCode;
+    }
+
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    // ✅ REQUIRED BY TESTS
+    public String getModel() {
+        return model;
+    }
+
+    // ✅ REQUIRED BY TESTS
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public Integer getMaxAllowedPerEmployee() {
+        return maxAllowedPerEmployee;
+    }
+
     public void setMaxAllowedPerEmployee(Integer maxAllowedPerEmployee) {
         this.maxAllowedPerEmployee = maxAllowedPerEmployee;
     }
-    public void setActive(Boolean active) { this.active = active; }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }

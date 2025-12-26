@@ -12,21 +12,64 @@ public class IssuedDeviceRecord {
     private Long id;
 
     private Long employeeId;
-    private Long deviceId;
-    private String status;
+
+    // ✅ REQUIRED BY TESTS
+    private Long deviceItemId;
+
     private LocalDate issuedDate;
     private LocalDate returnedDate;
+    private String status;
 
-    public Long getId() { return id; }
-    public Long getEmployeeId() { return employeeId; }
-    public Long getDeviceId() { return deviceId; }
-    public String getStatus() { return status; }
-    public LocalDate getIssuedDate() { return issuedDate; }
-    public LocalDate getReturnedDate() { return returnedDate; }
+    /* ===== GETTERS & SETTERS ===== */
 
-    public void setEmployeeId(Long employeeId) { this.employeeId = employeeId; }
-    public void setDeviceId(Long deviceId) { this.deviceId = deviceId; }
-    public void setStatus(String status) { this.status = status; }
-    public void setIssuedDate(LocalDate issuedDate) { this.issuedDate = issuedDate; }
-    public void setReturnedDate(LocalDate returnedDate) { this.returnedDate = returnedDate; }
+    public Long getId() {
+        return id;
+    }
+
+    // ✅ REQUIRED BY TESTS
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    // ✅ REQUIRED BY TESTS
+    public Long getDeviceItemId() {
+        return deviceItemId;
+    }
+
+    // ✅ REQUIRED BY TESTS
+    public void setDeviceItemId(Long deviceItemId) {
+        this.deviceItemId = deviceItemId;
+    }
+
+    public LocalDate getIssuedDate() {
+        return issuedDate;
+    }
+
+    public void setIssuedDate(LocalDate issuedDate) {
+        this.issuedDate = issuedDate;
+    }
+
+    public LocalDate getReturnedDate() {
+        return returnedDate;
+    }
+
+    public void setReturnedDate(LocalDate returnedDate) {
+        this.returnedDate = returnedDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
