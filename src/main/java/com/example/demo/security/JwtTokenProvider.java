@@ -12,13 +12,13 @@ public class JwtTokenProvider {
     private final String secretKey;
     private final long validityInMs;
 
-    // ✅ REQUIRED by testcase
+    // ✅ EXACT constructor expected by testcase
     public JwtTokenProvider(String secretKey, int validityInMs) {
         this.secretKey = secretKey;
         this.validityInMs = validityInMs;
     }
 
-    // ✅ REQUIRED by testcase
+    // ✅ EXACT method expected by testcase
     public String generateToken(UserAccount user) {
         return Jwts.builder()
                 .setSubject(user.getEmail())
@@ -30,7 +30,6 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // ✅ REQUIRED by testcase
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
@@ -40,7 +39,6 @@ public class JwtTokenProvider {
         }
     }
 
-    // ✅ REQUIRED by testcase
     public String getUsername(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(secretKey)
