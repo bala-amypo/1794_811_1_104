@@ -5,10 +5,7 @@ import java.util.List;
 
 public interface IssuedDeviceRecordService {
 
-    // USED BY CONTROLLER
     IssuedDeviceRecord issueDevice(IssuedDeviceRecord record);
-
-    IssuedDeviceRecord issuedDevice(IssuedDeviceRecord record);
 
     IssuedDeviceRecord returnDevice(Long recordId);
 
