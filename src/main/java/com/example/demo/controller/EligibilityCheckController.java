@@ -5,7 +5,7 @@ import com.example.demo.service.EligibilityCheckService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/eligibility")
+@RequestMapping("/api/eligibility")
 public class EligibilityCheckController {
 
     private final EligibilityCheckService service;
@@ -14,12 +14,11 @@ public class EligibilityCheckController {
         this.service = service;
     }
 
-    @GetMapping("/check")
-    public EligibilityCheckRecord checkEligibility(
-            @RequestParam Long employeeId,
-            @RequestParam Long deviceId
+    @GetMapping("/{employeeId}/{deviceItemId}")
+    public EligibilityCheckRecord check(
+            @PathVariable Long employeeId,
+            @PathVariable Long deviceItemId
     ) {
-        // ✅ correct method name
-        return service.checkEligibility(employeeId, deviceId);
+        return service.validateEligibility(employeeId, deviceItemId);
     }
 }
