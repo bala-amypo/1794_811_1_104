@@ -1,9 +1,9 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "eligibility_check_records")
 public class EligibilityCheckRecord {
 
     @Id
@@ -11,38 +11,30 @@ public class EligibilityCheckRecord {
     private Long id;
 
     private Long employeeId;
+    private Long deviceItemId;
+    private Boolean isEligible;
+    private String reason;
+    private LocalDateTime checkedAt;
 
-    private Long deviceId;
-
-    private boolean eligible;
-
-    // ===== getters & setters =====
-
-    public Long getId() {
-        return id;
+    @PrePersist
+    public void prePersist() {
+        this.checkedAt = LocalDateTime.now();
     }
 
-    public Long getEmployeeId() {
-        return employeeId;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
-    }
+    public Long getEmployeeId() { return employeeId; }
+    public void setEmployeeId(Long employeeId) { this.employeeId = employeeId; }
 
-    public Long getDeviceId() {
-        return deviceId;
-    }
+    public Long getDeviceItemId() { return deviceItemId; }
+    public void setDeviceItemId(Long deviceItemId) { this.deviceItemId = deviceItemId; }
 
-    public void setDeviceId(Long deviceId) {
-        this.deviceId = deviceId;
-    }
+    public Boolean getIsEligible() { return isEligible; }
+    public void setIsEligible(Boolean isEligible) { this.isEligible = isEligible; }
 
-    public boolean isEligible() {
-        return eligible;
-    }
+    public String getReason() { return reason; }
+    public void setReason(String reason) { this.reason = reason; }
 
-    public void setEligible(boolean eligible) {
-        this.eligible = eligible;
-    }
+    public LocalDateTime getCheckedAt() { return checkedAt; }
 }

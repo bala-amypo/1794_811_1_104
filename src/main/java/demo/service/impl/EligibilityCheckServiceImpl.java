@@ -96,8 +96,9 @@ public class EligibilityCheckServiceImpl implements EligibilityCheckService {
         return eligibilityRepo.save(rec);
     }
 
-    @Override
-    public List<EligibilityCheckRecord> getChecksByEmployee(Long employeeId) {
-        return eligibilityRepo.findByEmployeeId(employeeId);
-    }
+   @Override
+public EligibilityCheckRecord checkEligibility(Long employeeId, Long deviceItemId) {
+    return validateEligibility(employeeId, deviceItemId);
+}
+
 }
