@@ -3,7 +3,7 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "device_catalog_item")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "deviceCode"))
 public class DeviceCatalogItem {
 
     @Id
@@ -12,12 +12,22 @@ public class DeviceCatalogItem {
 
     private String deviceCode;
     private String deviceType;
+
+    // ✅ REQUIRED BY TESTS
     private String model;
+
     private Integer maxAllowedPerEmployee;
     private Boolean active = true;
 
+    /* ===== GETTERS & SETTERS ===== */
+
     public Long getId() {
         return id;
+    }
+
+    // ✅ REQUIRED BY TESTS
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDeviceCode() {
@@ -36,10 +46,12 @@ public class DeviceCatalogItem {
         this.deviceType = deviceType;
     }
 
+    // ✅ REQUIRED BY TESTS
     public String getModel() {
         return model;
     }
 
+    // ✅ REQUIRED BY TESTS
     public void setModel(String model) {
         this.model = model;
     }
