@@ -17,13 +17,11 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
 
     private final IssuedDeviceRecordRepository recordRepo;
 
-    // ✅ Constructor USED BY SPRING BOOT
     @Autowired
     public IssuedDeviceRecordServiceImpl(IssuedDeviceRecordRepository recordRepo) {
         this.recordRepo = recordRepo;
     }
 
-    // ✅ Constructor USED ONLY BY TESTS
     public IssuedDeviceRecordServiceImpl(
             IssuedDeviceRecordRepository recordRepo,
             EmployeeProfileRepository employeeRepo,

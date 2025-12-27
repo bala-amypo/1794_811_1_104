@@ -25,7 +25,6 @@ public class PolicyRule {
 
     private Boolean active = true;
 
-    /* ================= GETTERS & SETTERS ================= */
 
     public Long getId() {
         return id;

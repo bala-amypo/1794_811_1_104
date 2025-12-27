@@ -16,7 +16,6 @@ public class EligibilityCheckController {
         this.service = service;
     }
 
-    // POST /api/eligibility/validate/{employeeId}/{deviceItemId}
     @PostMapping("/validate/{employeeId}/{deviceItemId}")
     public EligibilityCheckRecord validateEligibility(
             @PathVariable Long employeeId,
@@ -25,7 +24,6 @@ public class EligibilityCheckController {
         return service.validateEligibility(employeeId, deviceItemId);
     }
 
-    // GET /api/eligibility/employee/{employeeId}
     @GetMapping("/employee/{employeeId}")
     public List<EligibilityCheckRecord> getChecksByEmployee(
             @PathVariable Long employeeId
