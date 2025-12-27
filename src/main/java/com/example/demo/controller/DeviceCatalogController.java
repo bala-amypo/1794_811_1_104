@@ -33,3 +33,5 @@ public class DeviceCatalogController {
         return service.getAllItems();
     }
 }
+
+
