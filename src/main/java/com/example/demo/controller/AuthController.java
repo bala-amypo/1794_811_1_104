@@ -18,11 +18,9 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // ---------------- REGISTER ----------------
     @PostMapping("/register")
     public String register(@RequestBody UserAccount user) {
 
-        // encode password (required for controller, tests ignore this)
         if (user.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
@@ -30,16 +28,13 @@ public class AuthController {
         return "Registered";
     }
 
-    // ---------------- LOGIN ----------------
     @PostMapping("/login")
     public String login(@RequestBody UserAccount user) {
 
-        // minimal validation
         if (user.getEmail() == null || user.getPassword() == null) {
             throw new RuntimeException("Email and password required");
         }
 
-        // IMPORTANT: token generation must match testcase
         String token = jwtTokenProvider.generateToken(user);
 
         return token;
