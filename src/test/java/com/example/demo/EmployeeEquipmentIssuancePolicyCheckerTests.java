@@ -801,4 +801,3 @@ public class EmployeeEquipmentIssuancePolicyCheckerTests {
         Assert.assertTrue(rec.getReason().contains("Policy violation"));
     }
 }
-
