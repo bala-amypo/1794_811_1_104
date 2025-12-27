@@ -13,17 +13,20 @@ public class IssuedDeviceRecord {
 
     private Long employeeId;
 
+    // ✅ REQUIRED BY TESTS
     private Long deviceItemId;
 
     private LocalDate issuedDate;
     private LocalDate returnedDate;
     private String status;
 
+    /* ===== GETTERS & SETTERS ===== */
 
     public Long getId() {
         return id;
     }
 
+    // ✅ REQUIRED BY TESTS
     public void setId(Long id) {
         this.id = id;
     }
@@ -36,10 +39,12 @@ public class IssuedDeviceRecord {
         this.employeeId = employeeId;
     }
 
+    // ✅ REQUIRED BY TESTS
     public Long getDeviceItemId() {
         return deviceItemId;
     }
 
+    // ✅ REQUIRED BY TESTS
     public void setDeviceItemId(Long deviceItemId) {
         this.deviceItemId = deviceItemId;
     }
