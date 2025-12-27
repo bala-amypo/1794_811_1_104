@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 /**
  * Massive TestNG test class with 60+ test cases
  */
-@SpringBootTest
+
 @Listeners(TestResultListener.class)
 public class EmployeeEquipmentIssuancePolicyCheckerTests {
 
